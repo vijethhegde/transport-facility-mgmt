@@ -1,0 +1,57 @@
+<mat-card class="card-color">
+  <div class="row">
+    <div class="col-4">
+      <mat-form-field class="w-100" appearance="standard">
+        <mat-label>Filter Vehicle Type</mat-label>
+        <mat-select [formControl]="vehicleType">
+          <mat-option value="All">All</mat-option>
+          <mat-option value="Bike">Bike</mat-option>
+          <mat-option value="Car">Car</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-4">
+      <mat-form-field class="w-100" appearance="standard">
+        <mat-label>Your Employee ID</mat-label>
+        <input
+          matInput
+          [formControl]="bookingEmployeeId"
+          placeholder="e.g. EMP123"
+        />
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="filteredRides()?.length">
+    <div class="rides-grid col-6" *ngFor="let ride of filteredRides()">
+      <div class="ride-card">
+        <div class="ride-header">
+          <span class="vehicle-type" [ngClass]="ride.vehicleType.toLowerCase()">
+            {{ ride.vehicleType === "Bike" ? "🏍️" : "🚗" }}
+            {{ ride.vehicleType }}
+          </span>
+          <strong>{{ ride.vehicleNo }}</strong>
+        </div>
+
+        <div class="ride-info">
+          <div><strong>👤 Driver:</strong> {{ ride.employeeId }}</div>
+          <div><strong>🕐 Time:</strong> {{ ride.time }}</div>
+          <div><strong>📍 From:</strong> {{ ride.pickUp }}</div>
+          <div><strong>📍 To:</strong> {{ ride.destination }}</div>
+        </div>
+
+        <div class="vacant-seats">
+          💺 {{ ride.vacantSeats }} seats available
+        </div>
+
+        <button class="btn btn-success" (click)="bookRide(ride)">Book</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!filteredRides()?.length">
+    <div class="no-data-container d-flex align-items-center justify-content-center h-100">
+      <img src="assets/no-rides-available.webp" alt="No data" class="no-data w-50" />
+    </div>
+  </ng-container>
+</mat-card>
